@@ -38,14 +38,11 @@ func Exec(exe string, args ...string) (outStr string, err error) {
 
 // Interactive runs the given command proxying current Stdin/Stdout/Stderr
 // which makes it interactive for running even something like `bash`.
-func Interactive(exe string, args ...string) (err error) {
+func Interactive(outputWriter OutputWriter, exe string, args ...string) (err error) {
 	var (
 		cmd            *exec.Cmd
 		parsedRedirect *DefaultParsedRedirect
-		outputWriter   OutputWriter
 	)
-
-	outputWriter = NewOutputWriter()
 
 	if exe == "docker-compose" {
 		args = append(dockerComposeDefaultArgs(), args...)

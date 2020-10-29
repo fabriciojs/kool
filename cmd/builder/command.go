@@ -12,6 +12,7 @@ import (
 
 // DefaultCommand holds data and logic for an executable command.
 type DefaultCommand struct {
+	shell.OutputWriter
 	command string
 	args    []string
 }
@@ -37,7 +38,7 @@ type Command interface {
 
 // NewCommand Create a new command.
 func NewCommand(command string, args ...string) *DefaultCommand {
-	return &DefaultCommand{command, args}
+	return &DefaultCommand{shell.NewOutputWriter(), command, args}
 }
 
 // ParseCommand transforms a command line string into separated
@@ -50,7 +51,7 @@ func ParseCommand(line string) (command *DefaultCommand, err error) {
 		return
 	}
 
-	command = &DefaultCommand{parsed[0], parsed[1:]}
+	command = &DefaultCommand{shell.NewOutputWriter(), parsed[0], parsed[1:]}
 
 	return
 }
@@ -79,7 +80,7 @@ func (c *DefaultCommand) Interactive(args ...string) (err error) {
 		finalArgs = append(finalArgs, args...)
 	}
 
-	err = shell.Interactive(c.command, finalArgs...)
+	err = shell.Interactive(c.OutputWriter, c.command, finalArgs...)
 	return
 }
 

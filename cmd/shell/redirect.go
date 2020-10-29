@@ -50,7 +50,7 @@ func (p *DefaultParsedRedirect) CreateCommand(executable string) (cmd *exec.Cmd)
 	cmd = exec.Command(executable, p.args...)
 	cmd.Env = os.Environ()
 	cmd.Stdout = p.out
-	cmd.Stderr = os.Stderr
+	cmd.Stderr = p.out
 	cmd.Stdin = p.in
 	return
 }
